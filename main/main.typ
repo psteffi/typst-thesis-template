@@ -114,6 +114,17 @@
       #author-given-name #author-surname
     ]
 
+    // Sperrvermerk / confidentiality notice. Omit for proposal.
+    page[
+      #let notice = if is-en [Confidentiality Notice] else [Sperrvermerk]
+      #text(size: 20pt, font: "New Computer Modern", strong(notice))
+
+      Die vorliegende Abschlussarbeit beinhaltet vertrauliche Daten der Vector Informatik GmbH, die nicht für die Öffentlichkeit bestimmt sind.
+      Sie darf lediglich Gutachtern sowie berechtigten Mitgliedern des Prüfungsausschusses zugänglich gemacht werden.
+      Die Veröffentlichung oder Vervielfältigung der Abschlussarbeit - auch auszugsweise - ist untersagt.
+      An Dritte darf dieses Dokument während der Sperrfrist nur mit ausdrücklicher schriftlicher Genehmigung des Verfassers sowie des Unternehmens weitergegeben werden.
+    ]
+
     // Vermerk für Gendern
     page[
       #if not is-en {
