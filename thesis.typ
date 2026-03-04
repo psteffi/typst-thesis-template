@@ -8,6 +8,7 @@
   //title-en: [Title of the thesis],
   author-surname: "Mustermann",
   author-given-name: "Max",
+  company: "Musterfirma",
   abstract-de: abstract-de,
   abstract-en: abstract-en,
   lang: "de",
@@ -16,3 +17,5 @@
   appendix: appendix,
   signature: image("main/images/unterschrift.png"),
 )
+
+//--- Beginn der eigentlichen Ausarbeitung ---//
