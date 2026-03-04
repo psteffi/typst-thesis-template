@@ -6,6 +6,18 @@ Während der `main` Ordner alle Informationen für die korrekte Darstellung des 
 Der `images` Ordner verfügt über jegliche Ressourcen, welche während der Ausarbeitung verwendet werden, darunter zählen insbesondere Bilddateien.
 Bedingt der Anzahl an Ressourcen pro Kapitel ist es ggf. ratsam, eine tiefere Struktur entsprechend der Oberkapitel anzulegen.
 
+Um in `acronyms.typ` hinterlegte Akronyme in anderen Kapiteln verwenden zu können, muss zu Beginn der jeweiligen `.typ` Datei der folgende Import erfolgen:
+
+``` typ
+#import "@preview/acrostiche:0.6.0": acr
+```
+
+Nun können Abkürzungen über 
+```typ
+#acr("iso")
+```
+einheitlich in die schriftliche Fassung eingepflegt werden.
+
 ## Nomenklatur
 Kapitel werden mit doppelten Zahlen numeriert, so z.B. `00_Einleitung`.
 Dies dient der Erweiterbarkeit zu einer tieferen Struktur mit Unterkapiteln, sollte dies von Nöten sein, so z.B. `01_Umfeld`, `02_Ziel`.
@@ -32,7 +44,7 @@ Ausnahmen bestehen darin, falls jede Ressource unter der gleichen gemeinsamen Co
 Commit Messages sollten in klarer, aber kurzer Form widergeben, welche Änderungen oder Verbesserungen an einer bestimmten Datei stattgefunden haben.
 Beinhaltet ein Commit mehrere Dateien, so ist der genaue Kontext der Änderung anzugeben, z.B. wenn die Ressourcen um ein spezifisches Kapitel betreffende Inhalte erweitert werden.
 
-# Erstellen der PDF
+# Erstellung der PDF
 Mithilfe des `makefiles`, das direkt unter der Wurzel zu finden ist, kann über den simplen Kommandozeilenbefehl `make` die PDF basierend auf dem `typst`-Projekt erstellt werden.
 Die Datei ist daraufhin unter dem Namen `thesis.pdf` unter `result/thesis.pdf` wiederzufinden.
 Bei Bedarf können sowohl Zielort als auch Benennung innerhalb des `makefiles` angepasst werden.
