@@ -20,6 +20,8 @@
   author-surname: none,
   // The author's givenname.
   author-given-name: none,
+  // The company this thesis is written at
+  company: none,
   // The submission date.
   submission-date: datetime.today(),
   // The submission city.
@@ -119,7 +121,7 @@
       #let notice = if is-en [Confidentiality Notice] else [Sperrvermerk]
       #text(size: 20pt, font: "New Computer Modern", strong(notice))
 
-      Die vorliegende Abschlussarbeit beinhaltet vertrauliche Daten der Vector Informatik GmbH, die nicht für die Öffentlichkeit bestimmt sind.
+      Die vorliegende Abschlussarbeit beinhaltet vertrauliche Daten der #text(company), die nicht für die Öffentlichkeit bestimmt sind.
       Sie darf lediglich Gutachtern sowie berechtigten Mitgliedern des Prüfungsausschusses zugänglich gemacht werden.
       Die Veröffentlichung oder Vervielfältigung der Abschlussarbeit - auch auszugsweise - ist untersagt.
       An Dritte darf dieses Dokument während der Sperrfrist nur mit ausdrücklicher schriftlicher Genehmigung des Verfassers sowie des Unternehmens weitergegeben werden.
