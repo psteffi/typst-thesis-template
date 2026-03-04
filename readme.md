@@ -32,7 +32,7 @@ Ausnahmen bestehen darin, falls jede Ressource unter der gleichen gemeinsamen Co
 Commit Messages sollten in klarer, aber kurzer Form widergeben, welche Änderungen oder Verbesserungen an einer bestimmten Datei stattgefunden haben.
 Beinhaltet ein Commit mehrere Dateien, so ist der genaue Kontext der Änderung anzugeben, z.B. wenn die Ressourcen um ein spezifisches Kapitel betreffende Inhalte erweitert werden.
 
-# Erstellung der PDF
+# Erstellen der PDF
 Mithilfe des `makefiles`, das direkt unter der Wurzel zu finden ist, kann über den simplen Kommandozeilenbefehl `make` die PDF basierend auf dem `typst`-Projekt erstellt werden.
 Die Datei ist daraufhin unter dem Namen `thesis.pdf` unter `result/thesis.pdf` wiederzufinden.
 Bei Bedarf können sowohl Zielort als auch Benennung innerhalb des `makefiles` angepasst werden.
