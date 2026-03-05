@@ -189,7 +189,8 @@
 
   // Initialize acronyms.
   if acronyms != none {
-    init-acronyms(acronyms)
+    let sorted-acronyms = acronyms.pairs().sorted(key: k => k.at(0))
+    init-acronyms(sorted-acronyms)
   }
 
   // Configure headings.
