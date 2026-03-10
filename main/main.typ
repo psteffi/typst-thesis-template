@@ -12,6 +12,8 @@
   title-de: [Titel der Thesis],
   // Language of the thesis ("de" or "en").
   lang: "en",
+  // confidentiality notice
+  confidentiality-notice: none,
   // English abstract.
   abstract-en: none,
   // German abstract.
@@ -73,9 +75,8 @@
     full: true,
   )
 
-  // Configure unnumbered list. For the first level
-  // we use dots and dashes for the second level.
-  set list(indent: 1em, spacing: 1em, marker: ([•], [*–*]))
+  // Configure unnumbered list
+  set list(indent: 1em, spacing: 1em, marker: ([•], [◦], [‣]))
 
   // Tables & figures
   set figure(gap: 1.5em)
@@ -116,7 +117,6 @@
       #author-given-name #author-surname
     ]
 
-    // Sperrvermerk / confidentiality notice. Omit for proposal.
     page[
       #let notice = if is-en [Confidentiality Notice] else [Sperrvermerk]
       #text(size: 20pt, font: "New Computer Modern", strong(notice))
