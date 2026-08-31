@@ -2,7 +2,7 @@
 
 #let institute = (
   de: "Hochschule Karlsruhe - Universität für Technik und Wirtschaft",
-  en: "Hochschule Karslruhe - University of Applied Sciences",
+  en: "Hochschule Karlsruhe - University of Applied Sciences",
 )
 
 #let faculties = (
