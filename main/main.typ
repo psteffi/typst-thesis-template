@@ -119,7 +119,7 @@
   show quote: set pad(x: 3em, top: -1em)
 
   // cover page später als pdf importiert
-  image("Titelblatt.pdf")
+  //image("Titelblatt.pdf")
 
   set page(numbering: "I")
 

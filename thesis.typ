@@ -1,7 +1,9 @@
 #import "main/main.typ": main-thesis
+#import "main/util.typ": todo
 #import "acronyms.typ": acronyms
 #import "abstract.typ": abstract-de, abstract-en
 #import "appendix.typ" as appendix
+#import "glossary.typ" as glossary
 
 #show: main-thesis.with(
   //title-de: [Titel der Thesis],
@@ -19,3 +21,4 @@
 )
 
 //--- Beginn der eigentlichen Ausarbeitung ---//
+#include "chapters/Chapter1.typ"
