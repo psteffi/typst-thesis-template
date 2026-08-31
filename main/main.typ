@@ -1,4 +1,4 @@
-#import "@preview/glossarium:0.5.10": gls, make-glossary, print-glossary, register-glossary
+#import "@preview/glossarium:0.5.10": gls, glspl, make-glossary, print-glossary, register-glossary
 #import "@preview/acrostiche:0.6.0": init-acronyms, print-index
 #import "uni-terms.typ": *
 
@@ -12,8 +12,6 @@
   title-de: [Titel der Thesis],
   // Language of the thesis ("de" or "en").
   lang: "en",
-  // confidentiality notice
-  confidentiality-notice: none,
   // English abstract.
   abstract-en: none,
   // German abstract.
@@ -27,11 +25,13 @@
   // The submission date.
   submission-date: datetime.today(),
   // The submission city.
-  city: "Karslruhe",
+  city: "Karlsruhe",
   // Toggle for proposal-mode. Mainly changes the title and omits some declarations.
   // This is useful if you want to cleanly transition from a proposal into a thesis
   // without much copy-pasting or restructuring. The template does it for you.
   is-proposal: false,
+  // List of glossary items, Check `glossary.typ`
+  glossary: none,
   // Your bibliography. Pass `bibliography("your_refs.bib")`.
   bibliography: none,
   // A list of acronyms. Check the example in `acronyms.typ`.
@@ -40,6 +40,8 @@
   appendix: none,
   // An image of your handwritten signature.
   signature: none,
+  // chapter preview
+  chapter-preview: false,
   // The content of your thesis.
   body,
 ) = {
@@ -54,6 +56,7 @@
 
   // Set the body font.
   set text(size: 11pt, font: "New Computer Modern", lang: lang)
+  set par(justify: true, leading: 0.9em, spacing: 1.35em)
 
   let date-format = "[day].[month].[year]"
 
@@ -83,19 +86,45 @@
   show figure.caption: set text(font: "New Computer Modern", size: 9pt)
   show figure.where(kind: table): set figure.caption(position: top)
   show figure: set block(breakable: true)
+  show figure.where(kind: image): set figure(
+    supplement: [Abb.],
+  )
+  show figure.where(kind: image): it => {
+    v(0.7cm)
+    it
+    v(0.7cm)
+  }
+  show figure.where(kind: table): it => {
+    v(0.7cm)
+    it
+    v(0.7cm)
+  }
+  show figure.where(kind: raw): it => {
+    v(0.7cm)
+    //line(length: 35%, stroke: 0.6pt)
+    it
+    line(length: 35%, stroke: 0.6pt)
+    v(0.7cm)
+  }
+  show figure.caption.where(kind: raw): it => {
+    it
+    line(length: 35%, stroke: 0.6pt)
+  }
+  show figure.where(kind: raw): set figure(supplement: [Quellcode])
+  show figure.where(kind: raw): set figure.caption(position: top)
   set table(stroke: none, align: left)
 
   // Configure quotes.
   set quote(block: true)
-  show quote: set pad(x: 3em, top: -2em)
+  show quote: set pad(x: 3em, top: -1em)
 
   // cover page später als pdf importiert
+  image("Titelblatt.pdf")
 
-  // Start numbering from here using roman.
   set page(numbering: "I")
 
   // Omit for proposal.
-  if not is-proposal {
+  if not is-proposal and abstract-de != none {
     // Declarations, signature and license.
     page[
       #let declaration = if is-en [Declaration] else [Erklärung]
@@ -104,7 +133,7 @@
       #if is-en [
         I confirm that the submitted thesis is my original work and was written by me without further assistance. Appropriate credit has been given where reference has been made to the work of others.
       ] else [
-        Hiermit erkläre ich, dass ich die vorliegende Arbeit eigenständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe. Textpassagen, die sich auf Publikationen anderer Autoren stützen, sind als solche gekennzeichnet.
+        Hiermit erkläre ich, dass ich die vorliegende Arbeit eigenständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe. Textpassagen, die sich auf Publikationen anderer Autoren stützen, sind als solche gekennzeichnet. Zur stellenweise Unterstützung des sprachlichen Ausbaus wurde das KI-gestützte Sprachmodell ChatGPT (OpenAI) verwendet. Die inhaltliche Konzeption, Analyse und Ausarbeitung der Arbeit erfolgten eigenständig.
       ]
 
       #pad(
@@ -113,8 +142,13 @@
         bottom: 0.25cm,
       )
 
-      #line(start: (0%, 10%), length: 30%)
-      #author-given-name #author-surname
+      #box[
+        #signature
+        #v(-4cm)
+        #line(start: (0%, 10%), length: 30%)
+        #author-given-name #author-surname
+      ]
+      //#signature
     ]
 
     page[
@@ -149,16 +183,16 @@
   // Top level headings always start on a new page.
   show heading.where(level: 1): h => {
     pagebreak(weak: true)
-    pad(top: 5em, bottom: 1em, text(size: 22pt, h))
+    pad(top: 5em, bottom: 2em, text(size: 22pt, h))
   }
 
   // Configure padding and text size depending on heading level.
   show heading.where(level: 2): h => pad(bottom: 1em, top: 1em, text(size: 15pt, h))
-  show heading.where(level: 3): h => pad(bottom: 1em, h)
+  show heading.where(level: 3): h => pad(bottom: 1em, top: 0.6em, h)
   show heading.where(level: 4): h => text(font: "New Computer Modern", h.body)
 
   // Abstract in german and english. Omit if proposal.
-  if not is-proposal {
+  if not is-proposal and abstract-de != none {
     text(size: 20pt, font: "New Computer Modern", strong([Zusammenfassung]))
     v(1em)
     abstract-de
@@ -185,7 +219,9 @@
   )
 
   // Print the table of contents.
-  outline(indent: auto, depth: 3)
+  if not chapter-preview {
+    outline(indent: auto, depth: 3)
+  }
 
   // Initialize acronyms.
   if acronyms != none {
@@ -230,6 +266,23 @@
     ],
   )
 
+  let custom-glossary(entry, ..args) = {
+    align(left)[
+      #block(width: 100%)[
+        #text(weight: "bold")[#entry.short]
+        #linebreak()
+        #entry.description
+      ]
+    ]
+    v(-4.5em)
+  }
+
+  // Init glossary, this needs to happen before the `body` is included.
+  if glossary != none {
+    show: make-glossary
+    register-glossary(glossary)
+  }
+
   context {
     // Remember the page number before resetting.
     let page-number = here().page()
@@ -252,6 +305,13 @@
 
   set heading(numbering: none)
 
+  // Print the glossary
+  if glossary != none {
+    pagebreak(weak: true)
+    [= Glossar]
+    print-glossary(glossary, show-all: true, user-print-gloss: custom-glossary)
+  }
+
   // Change the outline styling for figures, tables and listings.
   show outline.entry: it => link(
     it.element.location(),
@@ -261,35 +321,36 @@
 
   // Print the list of figures if it's not empty. The context block enables us to react to the
   // number of images present in the document. See https://typst.app/docs/reference/context/.
-  context {
-    if counter(figure.where(kind: image)).final().at(0) > 0 {
-      let title = if lang == "de" [Abbildungsverzeichnis] else [List of Figures]
-      outline(indent: auto, title: title, target: figure.where(kind: image))
+  if not chapter-preview {
+    context {
+      if counter(figure.where(kind: image)).final().at(0) > 0 {
+        let title = if lang == "de" [Abbildungsverzeichnis] else [List of Figures]
+        outline(indent: auto, title: title, target: figure.where(kind: image))
+      }
+    }
+
+    // Print the list of tables if it's not empty.
+    context {
+      if counter(figure.where(kind: table)).final().at(0) > 0 {
+        let title = if is-en [List of Tables] else [Tabellenverzeichnis]
+        outline(indent: auto, title: title, target: figure.where(kind: table))
+      }
+    }
+
+    // Print the list of listings if it's not empty.
+    context {
+      if counter(figure.where(kind: raw)).final().at(0) > 0 {
+        let title = if is-en [List of Source Code] else [Quellcodeverzeichnis]
+        outline(indent: auto, title: title, target: figure.where(kind: raw))
+      }
+    }
+
+    // Print acronyms.
+    if acronyms != none {
+      let title = if lang == "de" [Abkürzungsverzeichnis] else [Acronyms Index]
+      print-index(delimiter: "", title: title, clickable: false, row-gutter: 1em, outlined: true)
     }
   }
-
-  // Print the list of tables if it's not empty.
-  context {
-    if counter(figure.where(kind: table)).final().at(0) > 0 {
-      let title = if is-en [List of Tables] else [Tabellenverzeichnis]
-      outline(indent: auto, title: title, target: figure.where(kind: table))
-    }
-  }
-
-  // Print the list of listings if it's not empty.
-  context {
-    if counter(figure.where(kind: raw)).final().at(0) > 0 {
-      let title = if is-en [List of Source Code] else [Quellcodeverzeichnis]
-      outline(indent: auto, title: title, target: figure.where(kind: raw))
-    }
-  }
-
-  // Print acronyms.
-  if acronyms != none {
-    let title = if lang == "de" [Abkürzungsverzeichnis] else [Acronyms Index]
-    print-index(delimiter: "", title: title, clickable: false, row-gutter: 1em, outlined: true)
-  }
-
   // Print bibliography.
   bibliography
 
